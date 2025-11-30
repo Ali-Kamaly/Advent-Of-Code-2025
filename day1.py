@@ -1,0 +1,1 @@
+print("Advent of Code Day 1")
