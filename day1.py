@@ -1,5 +1,5 @@
 def read_file(directions):
-    with open ("puzzle_input.txt") as file:
+    with open ("day1.txt") as file:
         for i in file:
             directions.append(i)
 
