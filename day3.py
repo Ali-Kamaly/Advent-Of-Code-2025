@@ -12,14 +12,21 @@ def calculate_jolts(lines):
         max_digit_found = 0
         for j in i:
             temp_list.append(j)
+        number = ""
+        digits_found = 0
+
+        while digits_found !=12:
+            try:
+                max_digit_found = max(temp_list[:(-11+digits_found)])
+            except ValueError:
+                max_digit_found = max(temp_list)
+            finally:
+                digit_loc = temp_list.index(max_digit_found)
+                temp_list = temp_list[digit_loc+1:]
+                digits_found +=1
+                number = number + str(max_digit_found)
+        jolts.append(int(number))
         
-        max_digit_found = max(temp_list[:-1])
-        max_digit_loc=temp_list.index(max_digit_found)
-
-        next_max = max(temp_list[max_digit_loc+1:])
-        value = int(str(max_digit_found) + str(next_max))
-
-        jolts.append(value)
     return sum(jolts)
 
 def main():
