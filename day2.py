@@ -14,20 +14,31 @@ def convert_to_intervals(data):
         intervals_data.append([lower_bound,upper_bound])
     return intervals_data
 
-def find_invalid_ids(data):
+def find_all_invalid_ids(data):
     invalid_ids = []
     for interval in data:
         lower_bound, upper_bound = interval[0], interval[1]+1
         for i in range(lower_bound, upper_bound):
-            mid_index = len(str(i))//2
-            if str(i)[:mid_index] == str(i)[mid_index:]:
-                invalid_ids.append(i)
-    return sum(invalid_ids)
+            num_length = len(str(i))
+            max_sequence_length = num_length//2 + 1
+            for sequence_length in range(1,max_sequence_length):
+                required_reps = num_length//sequence_length
+                if str(i) == str(i)[:sequence_length]*required_reps:
+                    if i not in invalid_ids:
+                        invalid_ids.append(i)
+                        #prevent double counting
+                else:
+                    continue
+    if len(invalid_ids)>1:
+        return sum(invalid_ids)
+    else:
+        return invalid_ids
+
 
 def main():
     data = read_file()
     intervals_data = convert_to_intervals(data)
-    print(find_invalid_ids(intervals_data))
+    print(find_all_invalid_ids(intervals_data))
 
 
 if __name__ == "__main__":
