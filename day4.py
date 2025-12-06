@@ -2,20 +2,23 @@ def read_file():
     data = []
     with open("day4.txt") as file:
         for i in file.readlines():
-            data.append(i.strip())
+            data.append(list(i.strip()))
     return data
 
-def find_accessible_paper(data):
+def find_accessible_paper(data, papers_accessible = 0):
+    accessible_paper = papers_accessible
     paper_indexes = []
-    total_lines = len(data)
+    try:
+        total_lines = len(data)
+    except TypeError:
+        return accessible_paper
+    edits = 0 
     
     for line in range(total_lines):
         for char in range(len(data[line])):
             if data[line][char] == "@":
                 paper_indexes.append([line,char])
-
-    accessible_paper = 0
-
+    
     for i in paper_indexes:
         line_num, index = i[0], i[1]
         num_adjacent_paper = 0
@@ -37,7 +40,7 @@ def find_accessible_paper(data):
                 num_adjacent_paper +=1
         except IndexError:
             pass
-
+        
 
         if line_num-1>=0:
             if data[line_num-1][index] == "@":
@@ -64,17 +67,20 @@ def find_accessible_paper(data):
         except IndexError:
             pass
 
-        if num_adjacent_paper<4:
+        if 0<=num_adjacent_paper<4:
             accessible_paper+=1
+            data[line_num][index] = "x"
+            edits+=1
 
-    return accessible_paper
+    while edits!= 0 :
+        accessible_paper, edits = find_accessible_paper(data, accessible_paper)
 
-
-
+    return accessible_paper, edits
 
 def main():
     data = read_file()
-    print(find_accessible_paper(data))
+    accessible_paper, edits = find_accessible_paper(data)
+    print(accessible_paper)
 
 if __name__ == "__main__":
     main()
